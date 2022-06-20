@@ -1,7 +1,5 @@
 package eu.unareil.bo;
 
-import eu.unareil.bo.classes.*;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

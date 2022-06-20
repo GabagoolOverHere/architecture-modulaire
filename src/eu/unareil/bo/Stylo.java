@@ -1,4 +1,4 @@
-package eu.unareil.bo.classes;
+package eu.unareil.bo;
 
 public class Stylo extends Produit {
     private String couleur;

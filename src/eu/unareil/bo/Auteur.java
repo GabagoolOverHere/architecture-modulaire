@@ -1,4 +1,4 @@
-package eu.unareil.bo.classes;
+package eu.unareil.bo;
 
 public class Auteur {
     private String nom;

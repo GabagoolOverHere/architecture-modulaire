@@ -1,4 +1,4 @@
-package eu.unareil.bo.classes;
+package eu.unareil.bo;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

@@ -1,4 +1,4 @@
-package eu.unareil.bo.classes;
+package eu.unareil.bo;
 
 import java.util.ArrayList;
 import java.util.List;

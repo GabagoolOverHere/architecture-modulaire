@@ -1,3 +1,3 @@
-package eu.unareil.bo.classes;
+package eu.unareil.bo;
 
 public enum TypeCartePostale {Paysage}

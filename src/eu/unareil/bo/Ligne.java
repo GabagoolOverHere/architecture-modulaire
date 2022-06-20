@@ -1,4 +1,4 @@
-package eu.unareil.bo.classes;
+package eu.unareil.bo;
 
 public class Ligne {
     private int quantite;

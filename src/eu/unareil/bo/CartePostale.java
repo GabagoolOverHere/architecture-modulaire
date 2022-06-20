@@ -1,10 +1,9 @@
-package eu.unareil.bo.classes;
+package eu.unareil.bo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CartePostale extends Produit {
-    List<Auteur> lesAuteurs = new ArrayList<>();
+    List<Auteur> lesAuteurs;
     private String type;
 
     public CartePostale(long refProd, String marque, String libelle, long qteStock, float prixUnitaire, List<Auteur> lesAuteurs, TypeCartePostale type) {
