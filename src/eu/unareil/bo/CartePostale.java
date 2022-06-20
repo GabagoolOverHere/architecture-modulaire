@@ -30,8 +30,8 @@ public class CartePostale extends Produit {
     public String toString() {
         int count = 1;
         StringBuilder sb = new StringBuilder();
-        sb.append("CartePostale [libelle=%s, marque=%s, prixUnitaire=%s euros,\n" +
-            "qteStock=%s, auteur(s)=");
+        sb.append(String.format("CartePostale [libelle=%s, marque=%s, prixUnitaire=%s euros,\n" +
+            "qteStock=%s, auteur(s)=", getLibelle(), getMarque(), String.format("%.2f", getPrixUnitaire()).replace('.', ','), getQteStock()));
         for (Auteur a : lesAuteurs) {
             sb.append(String.format("auteur%d=%s, ", count, a.toString()));
             count++;
