@@ -98,7 +98,7 @@ public class AuteursJDBC implements DAO<Auteur> {
     }
 
     @Override
-    public Auteur selectById(int id) throws DALException {
+    public Auteur selectById(long id) throws DALException {
         PreparedStatement pstmt = null;
         ResultSet rs;
         Auteur el = null;

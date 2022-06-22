@@ -20,10 +20,11 @@ public class AuteurCartePostaleJDBC implements DAO<AuteurCartePostale> {
     public long insert(AuteurCartePostale data) throws DALException {
         PreparedStatement pstmt = null;
         Connection cnx = JdbcTools.getConnection();
+        long id = 0;
         try {
             pstmt = cnx.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1, data.getRefAuteur());
-            pstmt.setInt(2, data.getRefCartePostale());
+            pstmt.setLong(1, data.getRefAuteur());
+            pstmt.setLong(2, data.getRefCartePostale());
 
             int nbRow = pstmt.executeUpdate();
             if (nbRow == 1) {
@@ -44,6 +45,8 @@ public class AuteurCartePostaleJDBC implements DAO<AuteurCartePostale> {
                 throw new DALException("erreur du insert au niveau du close- data=" + data, e.getCause());
             }
         }
+
+        return id;
     }
 
     @Override
@@ -77,8 +80,8 @@ public class AuteurCartePostaleJDBC implements DAO<AuteurCartePostale> {
         Connection cnx = JdbcTools.getConnection();
         try {
             pstmt = cnx.prepareStatement(SQL_UPDATE);
-            pstmt.setInt(1, data.getRefAuteur());
-            pstmt.setInt(2, data.getRefCartePostale());
+            pstmt.setLong(1, data.getRefAuteur());
+            pstmt.setLong(2, data.getRefCartePostale());
             pstmt.setLong(3, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -95,7 +98,7 @@ public class AuteurCartePostaleJDBC implements DAO<AuteurCartePostale> {
     }
 
     @Override
-    public AuteurCartePostale selectById(int id) throws DALException {
+    public AuteurCartePostale selectById(long id) throws DALException {
         PreparedStatement pstmt = null;
         ResultSet rs;
         AuteurCartePostale el = null;
