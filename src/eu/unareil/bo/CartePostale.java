@@ -18,6 +18,10 @@ public class CartePostale extends Produit {
         this.type = type.toString();
     }
 
+    public CartePostale(long refProd, String marque, String libelle, long qteStock, float prixUnitaire) {
+        super(refProd, marque, libelle, qteStock, prixUnitaire);
+    }
+
     public String getType() {
         return type;
     }
@@ -36,9 +40,11 @@ public class CartePostale extends Produit {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("CartePostale [libelle=%s, marque=%s, prixUnitaire=%s euros,\n" +
             "qteStock=%s, auteur(s)=", getLibelle(), getMarque(), String.format("%.2f", getPrixUnitaire()).replace('.', ','), getQteStock()));
-        for (Auteur a : lesAuteurs) {
-            sb.append(String.format("auteur%d=%s, ", count, a.toString()));
-            count++;
+        if (lesAuteurs != null) {
+            for (Auteur a : lesAuteurs) {
+                sb.append(String.format("auteur%d=%s, ", count, a.toString()));
+                count++;
+            }
         }
         sb.append(String.format("type=%s]", getType()));
         return sb.toString();

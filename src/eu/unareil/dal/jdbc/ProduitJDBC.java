@@ -5,6 +5,9 @@ import eu.unareil.dal.DALException;
 import eu.unareil.dal.DAO;
 
 import java.sql.*;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +29,7 @@ public class ProduitJDBC implements DAO<Produit> {
                 typeMine,
                 typeCartePostale
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
     private static final String SQL_UPDATE = """
             UPDATE
@@ -76,9 +79,18 @@ public class ProduitJDBC implements DAO<Produit> {
             pstmt.setString(2, data.getLibelle());
             pstmt.setLong(3, data.getQteStock());
             pstmt.setDouble(4, data.getPrixUnitaire());
+            pstmt.setNull(5, 0);
+            pstmt.setNull(6, 0);
+            pstmt.setNull(7, 0);
+            pstmt.setNull(8, 0);
+            pstmt.setNull(9, 0);
+            pstmt.setNull(10, 0);
+            pstmt.setNull(11, 0);
+            pstmt.setNull(12, 0);
 
             if (data instanceof Pain) {
-                pstmt.setString(6, "Pain");
+                pstmt.setString(5, "Pain");
+                //pstmt.setDate(6, (Date) Date.from(Instant.now().plus(2, ChronoUnit.DAYS)));
                 pstmt.setInt(7, ((Pain) data).getPoids());
             } else if (data instanceof Glace) {
                 pstmt.setString(5, "Glace");
@@ -99,12 +111,12 @@ public class ProduitJDBC implements DAO<Produit> {
                     id = rs.getLong(1);
                     if (data instanceof CartePostale) {
                         for (Auteur a : ((CartePostale) data).getLesAuteurs()) {
-                            try {
-                                Auteur auteur = auteursJDBC.selectById(a.getId());
-                                auteurCartePostaleJDBC.update(new AuteurCartePostale(auteur.getId(), rs.getLong(1)));
-                            } catch (Exception e) {
+                            if (auteursJDBC.selectById(a.getId()) == null) {
                                 long auteurId = auteursJDBC.insert(a);
                                 auteurCartePostaleJDBC.insert(new AuteurCartePostale(auteurId, rs.getLong(1)));
+                            } else {
+                                Auteur auteur = auteursJDBC.selectById(a.getId());
+                                auteurCartePostaleJDBC.update(new AuteurCartePostale(auteur.getId(), rs.getLong(1)));
                             }
                         }
                     }

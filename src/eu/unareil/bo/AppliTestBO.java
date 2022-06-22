@@ -1,6 +1,8 @@
 package eu.unareil.bo;
 
 
+import eu.unareil.dal.DALException;
+import eu.unareil.dal.jdbc.AuteursJDBC;
 import eu.unareil.dal.jdbc.ProduitJDBC;
 
 import java.time.LocalDate;
@@ -19,6 +21,7 @@ public class AppliTestBO {
     public static void main(String[] args) {
         List<Produit> produits = null;
         ProduitJDBC produitJDBC = new ProduitJDBC();
+        AuteursJDBC auteursJDBC = new AuteursJDBC();
         try {
             //Constituer une liste de produits
             produits = new ArrayList<Produit>();
@@ -90,11 +93,6 @@ public class AppliTestBO {
             produits.add(styloFeutre4);
             produits.add(styloFeutre5);
 
-            /*------------------------------- TEST DAL -------------------------------*/
-
-            for (Produit produit : produits)
-                produitJDBC.insert(produit);
-
 
             System.out.println("\nREM : Affichage du catalogue");
             //on affiche la liste des produits
@@ -161,6 +159,17 @@ public class AppliTestBO {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             System.out.println("ERREUR : " + e.getMessage());
+        }
+
+        System.out.println("/*------------------------------- TEST DAL -------------------------------*/");
+        try {
+            for (Produit produit : produits)
+                produitJDBC.insert(produit);
+
+            for (Auteur a : auteursJDBC.selectAll())
+                System.out.println(a);
+        } catch (DALException e) {
+            e.printStackTrace();
         }
     }
 

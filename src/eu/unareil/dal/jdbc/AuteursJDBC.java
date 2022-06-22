@@ -1,6 +1,7 @@
 package eu.unareil.dal.jdbc;
 
 import eu.unareil.bo.Auteur;
+import eu.unareil.bo.CartePostale;
 import eu.unareil.dal.DALException;
 import eu.unareil.dal.DAO;
 
@@ -14,6 +15,22 @@ public class AuteursJDBC implements DAO<Auteur> {
     private static final String SQL_DELETE = "DELETE FROM auteur WHERE id=?";
     private static final String SQL_SELECT_ALL = "SELECT * FROM auteur";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM auteur WHERE id=?";
+
+    private static final String SQL_SELECT_ALL_POSTCARDS = """
+            SELECT
+                p.refProd,
+                p.marque,
+                p.libelle,
+                p.qteStock,
+                p.prixUnitaire
+            FROM
+                produit p
+            JOIN auteur_cartePostale ac ON
+                p.refProd = ac.refCartePostale
+            JOIN auteur a ON
+                a.id = ac.refAuteur
+            WHERE a.id=?
+        """;
 
     @Override
     public long insert(Auteur data) throws DALException {
@@ -138,7 +155,7 @@ public class AuteursJDBC implements DAO<Auteur> {
             stmt = cnx.createStatement();
             rs = stmt.executeQuery(SQL_SELECT_ALL);
             while (rs.next()) {
-                el = new Auteur(rs.getLong(1), rs.getString(2), rs.getString(3));
+                el = new Auteur(rs.getLong(1), rs.getString(2), rs.getString(3), getCartePostales(rs.getLong(1)));
                 lesElements.add(el);
             }
 
@@ -154,5 +171,40 @@ public class AuteursJDBC implements DAO<Auteur> {
             }
         }
         return lesElements;
+    }
+
+    private List<CartePostale> getCartePostales(long id) throws DALException {
+        PreparedStatement pstmt = null;
+        ResultSet rs;
+        Auteur el = null;
+        List<CartePostale> list = new ArrayList<>();
+
+        Connection cnx = JdbcTools.getConnection();
+        try {
+            pstmt = cnx.prepareStatement(SQL_SELECT_ALL_POSTCARDS);
+            pstmt.setLong(1, id);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                list.add(new CartePostale(
+                    rs.getLong(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getLong(4),
+                    rs.getFloat(5)
+                ));
+            }
+
+        } catch (SQLException e) {
+            throw new DALException("erreur du select by id - id=" + id, e.getCause());
+        } finally {
+            try {
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+            } catch (SQLException e) {
+                throw new DALException("erreur du select by id au niveau du close- id=" + id, e.getCause());
+            }
+        }
+        return list;
     }
 }
