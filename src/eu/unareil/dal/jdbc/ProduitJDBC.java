@@ -166,6 +166,8 @@ public class ProduitJDBC implements DAO<Produit> {
     @Override
     public void update(Produit data) throws DALException {
         PreparedStatement pstmt = null;
+        AuteursJDBC auteursJDBC = new AuteursJDBC();
+        AuteurCartePostaleJDBC auteurCartePostaleJDBC = new AuteurCartePostaleJDBC();
 
         long id = data.getRefProd();
         Connection cnx = JdbcTools.getConnection();
@@ -175,9 +177,18 @@ public class ProduitJDBC implements DAO<Produit> {
             pstmt.setString(2, data.getLibelle());
             pstmt.setLong(3, data.getQteStock());
             pstmt.setDouble(4, data.getPrixUnitaire());
+            pstmt.setNull(5, 0);
+            pstmt.setNull(6, 0);
+            pstmt.setNull(7, 0);
+            pstmt.setNull(8, 0);
+            pstmt.setNull(9, 0);
+            pstmt.setNull(10, 0);
+            pstmt.setNull(11, 0);
+            pstmt.setNull(12, 0);
+            pstmt.setLong(13, id);
 
             if (data instanceof Pain) {
-                pstmt.setString(6, "Pain");
+                pstmt.setString(5, "Pain");
                 pstmt.setInt(7, ((Pain) data).getPoids());
             } else if (data instanceof Glace) {
                 pstmt.setString(5, "Glace");
@@ -190,8 +201,18 @@ public class ProduitJDBC implements DAO<Produit> {
             } else if (data instanceof CartePostale) {
                 pstmt.setString(5, "CartePostale");
             }
-            pstmt.setLong(13, id);
             pstmt.executeUpdate();
+            if (data instanceof CartePostale) {
+                for (Auteur a : ((CartePostale) data).getLesAuteurs()) {
+                    if (auteursJDBC.selectById(a.getId()) == null) {
+                        long auteurId = auteursJDBC.insert(a);
+                        auteurCartePostaleJDBC.insert(new AuteurCartePostale(auteurId, id));
+                    } else {
+                        Auteur auteur = auteursJDBC.selectById(a.getId());
+                        auteurCartePostaleJDBC.update(new AuteurCartePostale(auteur.getId(), id));
+                    }
+                }
+            }
         } catch (SQLException e) {
             throw new DALException("erreur du update - data=" + data, e.getCause());
         } finally {
@@ -217,7 +238,7 @@ public class ProduitJDBC implements DAO<Produit> {
             pstmt.setLong(1, id);
             rs = pstmt.executeQuery();
             if (rs.next()) {
-                switch (rs.getString(5)) {
+                switch (rs.getString(6)) {
                     case "Glace" -> el = new Glace(
                         rs.getLong(1),
                         rs.getDate(7).toLocalDate(),

@@ -168,10 +168,39 @@ public class AppliTestBO {
             System.out.println("/*------------------------------ Affichage des auteurs -------------------------------*/");
             for (Auteur a : auteursJDBC.selectAll())
                 System.out.println(a);
-
-            System.out.println("/*------------------------------ Affichage des produits-------------------------------*/");
+//
+            System.out.println("/*------------------------------ Affichage des produits -------------------------------*/");
             for (Produit p : produitJDBC.selectAll())
                 System.out.println(p);
+
+            System.out.println("/*------------------------------ Test select by id -------------------------------*/");
+            long id = produits.get(5).getRefProd();
+            Produit produit = produitJDBC.selectById(id);
+            System.out.println(produit);
+
+            System.out.println("/*------------------------------ Test delete OK -------------------------------*/");
+            produitJDBC.delete(produit);
+
+            System.out.println("/*------------------------------ Test update OK -------------------------------*/");
+            List<Auteur> nouvelleListeAuteurs = new ArrayList<>();
+            nouvelleListeAuteurs.add(new Auteur("Serges", "Lama"));
+            nouvelleListeAuteurs.add(new Auteur("Catherine", "Lama"));
+            long idCarte = 0;
+            for (Produit p : produits)
+                if (p instanceof CartePostale) {
+                    idCarte += p.getRefProd();
+                    break;
+                }
+            Produit carte = new CartePostale(
+                idCarte,
+                "nouvelle marque",
+                "nouveau libelle",
+                234,
+                2.3f,
+                nouvelleListeAuteurs,
+                TypeCartePostale.Paysage
+            );
+            produitJDBC.update(carte);
 
         } catch (DALException e) {
             e.printStackTrace();
