@@ -5,6 +5,7 @@ import eu.unareil.dal.DALException;
 import eu.unareil.dal.DAO;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
@@ -72,6 +73,7 @@ public class ProduitJDBC implements DAO<Produit> {
         AuteurCartePostaleJDBC auteurCartePostaleJDBC = new AuteurCartePostaleJDBC();
         PreparedStatement pstmt = null;
         Connection cnx = JdbcTools.getConnection();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         long id = 0;
         try {
             pstmt = cnx.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -90,10 +92,11 @@ public class ProduitJDBC implements DAO<Produit> {
 
             if (data instanceof Pain) {
                 pstmt.setString(5, "Pain");
-                //pstmt.setDate(6, (Date) Date.from(Instant.now().plus(2, ChronoUnit.DAYS)));
+                pstmt.setString(6, simpleDateFormat.format(Date.from(Instant.now().plus(2, ChronoUnit.DAYS))));
                 pstmt.setInt(7, ((Pain) data).getPoids());
             } else if (data instanceof Glace) {
                 pstmt.setString(5, "Glace");
+                pstmt.setDate(6, Date.valueOf(((Glace) data).getDateLimiteConso()));
                 pstmt.setString(8, ((Glace) data).getParfum());
                 pstmt.setInt(9, ((Glace) data).getTemperatureConservation());
             } else if (data instanceof Stylo) {
@@ -281,7 +284,7 @@ public class ProduitJDBC implements DAO<Produit> {
             rs = stmt.executeQuery(SQL_SELECT_ALL);
             while (rs.next()) {
                 long id = rs.getLong(1);
-                switch (rs.getString(5)) {
+                switch (rs.getString(6)) {
                     case "Glace" -> el = new Glace(
                         rs.getLong(1),
                         rs.getDate(7).toLocalDate(),

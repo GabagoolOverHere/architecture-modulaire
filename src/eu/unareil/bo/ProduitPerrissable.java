@@ -15,7 +15,7 @@ abstract public class ProduitPerrissable extends Produit {
         this.dateLimiteConso = dateLimiteConso;
     }
 
-    protected LocalDate getDateLimiteConso() {
+    public LocalDate getDateLimiteConso() {
         return dateLimiteConso;
     }
 

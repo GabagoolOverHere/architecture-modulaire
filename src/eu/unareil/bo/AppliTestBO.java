@@ -161,13 +161,18 @@ public class AppliTestBO {
             System.out.println("ERREUR : " + e.getMessage());
         }
 
-        System.out.println("/*------------------------------- TEST DAL -------------------------------*/");
+        System.out.println("/*------------------------------ TEST DAL -------------------------------*/");
         try {
             for (Produit produit : produits)
                 produitJDBC.insert(produit);
-
+            System.out.println("/*------------------------------ Affichage des auteurs -------------------------------*/");
             for (Auteur a : auteursJDBC.selectAll())
                 System.out.println(a);
+
+            System.out.println("/*------------------------------ Affichage des produits-------------------------------*/");
+            for (Produit p : produitJDBC.selectAll())
+                System.out.println(p);
+
         } catch (DALException e) {
             e.printStackTrace();
         }
