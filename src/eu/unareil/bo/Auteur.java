@@ -1,12 +1,27 @@
 package eu.unareil.bo;
 
 public class Auteur {
+    private long id;
     private String nom;
     private String prenom;
 
     public Auteur(String prenom, String nom) {
         this.nom = nom;
         this.prenom = prenom;
+    }
+
+    public Auteur(long id, String nom, String prenom) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getNom() {

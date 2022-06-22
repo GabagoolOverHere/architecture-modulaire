@@ -26,6 +26,10 @@ public class CartePostale extends Produit {
         this.type = type;
     }
 
+    public List<Auteur> getLesAuteurs() {
+        return lesAuteurs;
+    }
+
     @Override
     public String toString() {
         int count = 1;

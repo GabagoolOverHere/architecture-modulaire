@@ -22,27 +22,27 @@ abstract public class Produit {
         this.prixUnitaire = prixUnitaire;
     }
 
-    protected long getRefProd() {
+    public long getRefProd() {
         return refProd;
     }
 
-    protected void setRefProd(long refProd) {
+    public void setRefProd(long refProd) {
         this.refProd = refProd;
     }
 
-    protected String getLibelle() {
+    public String getLibelle() {
         return libelle;
     }
 
-    protected void setLibelle(String libelle) {
+    public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
 
-    protected String getMarque() {
+    public String getMarque() {
         return marque;
     }
 
-    protected void setMarque(String marque) {
+    public void setMarque(String marque) {
         this.marque = marque;
     }
 
@@ -50,15 +50,15 @@ abstract public class Produit {
         return prixUnitaire;
     }
 
-    protected void setPrixUnitaire(float prixUnitaire) {
+    public void setPrixUnitaire(float prixUnitaire) {
         this.prixUnitaire = prixUnitaire;
     }
 
-    protected long getQteStock() {
+    public long getQteStock() {
         return qteStock;
     }
 
-    protected void setQteStock(long qteStock) {
+    public void setQteStock(long qteStock) {
         this.qteStock = qteStock;
     }
 }
